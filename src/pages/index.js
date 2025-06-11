@@ -43,20 +43,18 @@ export default function Home() {
       </button>
 
       {output && (
-        <div
-          style={{
-            marginTop: '1.5rem',
-            backgroundColor: '#f3f4f6',
-            padding: '1rem',
-            borderRadius: '8px',
-            color: '#111827',
-            fontWeight: '500',
-          }}
-        >
-          <strong>Prediction:</strong>
-          <p>{output}</p>
-        </div>
-      )}
-    </main>
-  );
-}
+  <div
+    style={{
+      marginTop: '1.5rem',
+      backgroundColor: '#f9fafb', // Light gray background
+      padding: '1rem',
+      borderRadius: '8px',
+      color: '#1f2937', // Dark gray text
+      fontWeight: '500',
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+    }}
+  >
+    <strong>Prediction:</strong>
+    <p>{output}</p>
+  </div>
+)}
