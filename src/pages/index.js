@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <main style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem', color: '#ffffff' }}>
         AI Disease Predictor
       </h1>
 
@@ -25,7 +25,7 @@ export default function Home() {
         placeholder="Enter symptoms (e.g., fever, cough)"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        style={{ width: '100%', padding: '1rem', marginBottom: '1rem' }}
+        style={{ width: '100%', padding: '1rem', marginBottom: '1rem', borderRadius: '4px' }}
       />
 
       <button
@@ -42,19 +42,22 @@ export default function Home() {
         Predict
       </button>
 
-  {output && (
-  <div
-    style={{
-      marginTop: '1.5rem',
-      backgroundColor: '#1e293b', // dark background
-      padding: '1rem',
-      borderRadius: '8px',
-      color: '#f1f5f9', // light text
-      fontWeight: '500',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
-    }}
-  >
-    <strong style={{ display: 'block', marginBottom: '0.5rem' }}>Prediction:</strong>
-    <p>{output}</p>
-  </div>
-)}
+      {output && (
+        <div
+          style={{
+            marginTop: '1.5rem',
+            backgroundColor: '#1e293b', // dark background
+            padding: '1rem',
+            borderRadius: '8px',
+            color: '#f1f5f9', // light text
+            fontWeight: '500',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
+          }}
+        >
+          <strong style={{ display: 'block', marginBottom: '0.5rem' }}>Prediction:</strong>
+          <p>{output}</p>
+        </div>
+      )}
+    </main>
+  );
+}
