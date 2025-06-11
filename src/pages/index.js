@@ -1,63 +1,56 @@
-// pages/index.js
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function Home() {
-  const [symptoms, setSymptoms] = useState("");
-  const [prediction, setPrediction] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
 
-  const handlePredict = async () => {
-    setLoading(true);
-    setPrediction("");
+  const handleSubmit = async () => {
+    const res = await fetch('/api/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ input }),
+    });
 
-    try {
-      const res = await fetch("/api/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ symptoms }),
-      });
-
-      const data = await res.json();
-      setPrediction(data.result);
-    } catch (error) {
-      setPrediction("Error occurred while predicting.");
-    }
-
-    setLoading(false);
+    const data = await res.json();
+    setOutput(data.result);
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "100px auto", textAlign: "center" }}>
-      <h1>Disease Prediction App</h1>
-      <p>Enter your symptoms below (comma separated):</p>
+    <main style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem' }}>
+        AI Disease Predictor
+      </h1>
 
       <textarea
-        rows={5}
-        style={{ width: "100%", padding: 10 }}
-        placeholder="e.g. headache, fever, cough"
-        value={symptoms}
-        onChange={(e) => setSymptoms(e.target.value)}
+        rows={4}
+        placeholder="Enter symptoms (e.g., fever, cough)"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        style={{ width: '100%', padding: '1rem', marginBottom: '1rem' }}
       />
 
-      <br />
       <button
-        onClick={handlePredict}
+        onClick={handleSubmit}
         style={{
-          marginTop: 20,
-          padding: "10px 20px",
-          fontSize: 16,
-          cursor: "pointer",
+          padding: '0.5rem 1rem',
+          backgroundColor: '#2563eb',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
         }}
       >
-        {loading ? "Predicting..." : "Predict"}
+        Predict
       </button>
 
-      {prediction && (
-        <div style={{ marginTop: 30 }}>
-          <h3>Prediction Result:</h3>
-          <p>{prediction}</p>
+      {output && (
+        <div style={{ marginTop: '1.5rem', background: '#f3f4f6', padding: '1rem', borderRadius: '8px' }}>
+          <strong>Prediction:</strong>
+          <p>{output}</p>
         </div>
       )}
-    </div>
+    </main>
   );
 }
