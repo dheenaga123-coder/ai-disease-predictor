@@ -23,7 +23,13 @@ export default function Home() {
         color: '#ffffff',
       }}
     >
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem' }}>
+      <h1
+        style={{
+          fontSize: '24px',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+        }}
+      >
         AI Disease Predictor
       </h1>
 
@@ -57,20 +63,22 @@ export default function Home() {
         Predict
       </button>
 
-     {output && (
-  <div
-    style={{
-      marginTop: '1.5rem',
-      backgroundColor: '#f3f4f6', // Light gray background for visibility
-      padding: '1rem',
-      borderRadius: '8px',
-      color: '#111827', // Dark gray text
-      fontWeight: '500',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-    }}
-  >
-    <strong>Prediction:</strong>
-    <p>{output}</p>
-  </div>
-)}
+      {output && (
+        <div
+          style={{
+            marginTop: '1.5rem',
+            backgroundColor: '#f3f4f6', // Light background
+            padding: '1rem',
+            borderRadius: '8px',
+            color: '#111827', // Dark text
+            fontWeight: '500',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          <strong>Prediction:</strong>
+          <p>{output}</p>
+        </div>
+      )}
+    </main>
+  );
 }
