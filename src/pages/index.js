@@ -7,12 +7,9 @@ export default function Home() {
   const handleSubmit = async () => {
     const res = await fetch('/api/predict', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input }),
     });
-
     const data = await res.json();
     setOutput(data.result);
   };
@@ -46,7 +43,16 @@ export default function Home() {
       </button>
 
       {output && (
-        <div style={{ marginTop: '1.5rem', background: '#f3f4f6', padding: '1rem', borderRadius: '8px' }}>
+        <div
+          style={{
+            marginTop: '1.5rem',
+            backgroundColor: '#f3f4f6',
+            padding: '1rem',
+            borderRadius: '8px',
+            color: '#111827',
+            fontWeight: '500',
+          }}
+        >
           <strong>Prediction:</strong>
           <p>{output}</p>
         </div>

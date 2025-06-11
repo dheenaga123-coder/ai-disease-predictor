@@ -1,52 +1,42 @@
-// src/pages/api/predict.js
-
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Only POST requests allowed" });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { symptoms } = req.body;
+  const { input } = req.body;
+  const apiKey = process.env.OPENAI_API_KEY;
 
-  console.log("📝 Received symptoms:", symptoms); // Log input
+  if (!apiKey) {
+    return res.status(500).json({ error: 'Missing OpenAI API key' });
+  }
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        model: 'gpt-3.5-turbo',
         messages: [
-          {
-            role: "system",
-            content: "You are a medical assistant that predicts diseases based on symptoms.",
-          },
-          {
-            role: "user",
-            content: `Patient symptoms: ${symptoms}. What disease could it be?`,
-          },
+          { role: 'system', content: 'You are a medical assistant that predicts diseases based on symptoms.' },
+          { role: 'user', content: `The user reports the following symptoms: ${input}. What is the likely disease?` },
         ],
         temperature: 0.7,
+        max_tokens: 200,
       }),
     });
 
     const data = await response.json();
 
-    console.log("✅ OpenAI API response:");
-    console.dir(data, { depth: null });
-
-    const prediction = data.choices?.[0]?.message?.content?.trim();
-
-    if (!prediction) {
-      console.log("❌ No prediction in response.");
-      return res.status(200).json({ result: "⚠️ No prediction found in API response." });
+    if (!data.choices || !data.choices[0]?.message?.content) {
+      return res.status(500).json({ result: '⚠️ No prediction found in API response.' });
     }
 
-    res.status(200).json({ result: prediction });
+    return res.status(200).json({ result: data.choices[0].message.content.trim() });
   } catch (error) {
-    console.error("🚨 Error calling OpenAI API:", error);
-    res.status(500).json({ error: "Failed to call OpenAI API." });
+    console.error('API error:', error);
+    return res.status(500).json({ error: 'Failed to fetch prediction from OpenAI.' });
   }
 }
