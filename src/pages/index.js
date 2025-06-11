@@ -42,22 +42,19 @@ export default function Home() {
         Predict
       </button>
 
-      {output && (
-        <div
-          style={{
-            marginTop: '1.5rem',
-            backgroundColor: '#f9fafb',
-            padding: '1rem',
-            borderRadius: '8px',
-            color: '#1f2937',
-            fontWeight: '500',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-          }}
-        >
-          <strong>Prediction:</strong>
-          <p>{output}</p>
-        </div>
-      )}
-    </main>
-  );
-}
+  {output && (
+  <div
+    style={{
+      marginTop: '1.5rem',
+      backgroundColor: '#1e293b', // dark background
+      padding: '1rem',
+      borderRadius: '8px',
+      color: '#f1f5f9', // light text
+      fontWeight: '500',
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
+    }}
+  >
+    <strong style={{ display: 'block', marginBottom: '0.5rem' }}>Prediction:</strong>
+    <p>{output}</p>
+  </div>
+)}
