@@ -11,12 +11,19 @@ export default function Home() {
       body: JSON.stringify({ input }),
     });
     const data = await res.json();
-    setOutput(data.result);
+    setOutput(data.result || '⚠️ No prediction found in API response.');
   };
 
   return (
-    <main style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem', color: '#ffffff' }}>
+    <main
+      style={{
+        maxWidth: '600px',
+        margin: '0 auto',
+        padding: '2rem',
+        color: '#ffffff',
+      }}
+    >
+      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem' }}>
         AI Disease Predictor
       </h1>
 
@@ -25,7 +32,15 @@ export default function Home() {
         placeholder="Enter symptoms (e.g., fever, cough)"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        style={{ width: '100%', padding: '1rem', marginBottom: '1rem', borderRadius: '4px' }}
+        style={{
+          width: '100%',
+          padding: '1rem',
+          marginBottom: '1rem',
+          backgroundColor: '#111827',
+          color: '#f9fafb',
+          border: '1px solid #374151',
+          borderRadius: '4px',
+        }}
       />
 
       <button
@@ -42,22 +57,20 @@ export default function Home() {
         Predict
       </button>
 
-      {output && (
-        <div
-          style={{
-            marginTop: '1.5rem',
-            backgroundColor: '#1e293b', // dark background
-            padding: '1rem',
-            borderRadius: '8px',
-            color: '#f1f5f9', // light text
-            fontWeight: '500',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
-          }}
-        >
-          <strong style={{ display: 'block', marginBottom: '0.5rem' }}>Prediction:</strong>
-          <p>{output}</p>
-        </div>
-      )}
-    </main>
-  );
+     {output && (
+  <div
+    style={{
+      marginTop: '1.5rem',
+      backgroundColor: '#f3f4f6', // Light gray background for visibility
+      padding: '1rem',
+      borderRadius: '8px',
+      color: '#111827', // Dark gray text
+      fontWeight: '500',
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+    }}
+  >
+    <strong>Prediction:</strong>
+    <p>{output}</p>
+  </div>
+)}
 }
