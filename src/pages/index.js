@@ -3,6 +3,7 @@ import { useState } from 'react';
 export default function Home() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
+  const [showWelcome, setShowWelcome] = useState(true); // <-- new state
 
   const handleSubmit = async () => {
     const res = await fetch('/api/predict', {
@@ -13,6 +14,29 @@ export default function Home() {
     const data = await res.json();
     setOutput(data.result || '⚠️ No prediction found in API response.');
   };
+
+  if (showWelcome) {
+    return (
+      <main style={{ textAlign: 'center', marginTop: '100px', color: 'white' }}>
+        <h1>👋 Welcome to the AI Disease Predictor</h1>
+        <p>Describe your symptoms and let AI help you understand them.</p>
+        <button
+          onClick={() => setShowWelcome(false)}
+          style={{
+            marginTop: '1rem',
+            padding: '0.5rem 1rem',
+            backgroundColor: '#2563eb',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Start
+        </button>
+      </main>
+    );
+  }
 
   return (
     <main
@@ -67,10 +91,10 @@ export default function Home() {
         <div
           style={{
             marginTop: '1.5rem',
-            backgroundColor: '#f3f4f6', // Light background
+            backgroundColor: '#f3f4f6',
             padding: '1rem',
             borderRadius: '8px',
-            color: '#111827', // Dark text
+            color: '#111827',
             fontWeight: '500',
             boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
           }}

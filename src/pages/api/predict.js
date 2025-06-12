@@ -1,65 +1,39 @@
-// pages/api/predict.js
+import { OpenAI } from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method === "POST") {
+    const { symptoms } = req.body;
 
-  const { input } = req.body;
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    console.error('❌ OPENAI_API_KEY is missing in .env.local');
-    return res.status(500).json({ error: 'Missing OpenAI API key' });
-  }
-
-  try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
         messages: [
           {
-            role: 'system',
-            content: 'You are a medical assistant that predicts diseases based on symptoms.',
-          },
-          {
-            role: 'user',
-            content: `The user reports the following symptoms: ${input}. What is the likely disease?`,
+            role: "user",
+            content: `The user has these symptoms: ${symptoms}. What is the most likely disease? Respond in 1 sentence.`,
           },
         ],
         temperature: 0.7,
-        max_tokens: 200,
-      }),
-    });
+      });
 
-    // Handle API error responses
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('🧨 OpenAI API response error:', errorText);
-      return res.status(500).json({ error: 'OpenAI API Error', details: errorText });
+      console.log("OpenAI Response:", response); // 👈 Add this line to debug
+
+      const prediction = response.choices?.[0]?.message?.content;
+
+      if (prediction) {
+        res.status(200).json({ prediction });
+      } else {
+        res.status(200).json({ prediction: "No prediction found in API response." });
+      }
+    } catch (error) {
+      console.error("OpenAI error:", error);
+      res.status(500).json({ error: "API request failed" });
     }
-
-    const data = await response.json();
-
-    // ✅ Log full API response for debugging
-    console.log('📦 OpenAI response:', JSON.stringify(data, null, 2));
-
-    const message = data?.choices?.[0]?.message?.content;
-    if (!message) {
-      console.error('⚠️ No message content in OpenAI response:', data);
-      return res.status(500).json({ result: '⚠️ No prediction found in API response.' });
-    }
-
-    // Return prediction
-    return res.status(200).json({ result: message.trim() });
-
-  } catch (error) {
-    console.error('🔥 Unexpected API error:', error);
-    return res.status(500).json({ error: 'Failed to fetch prediction from OpenAI.' });
+  } else {
+    res.status(405).json({ error: "Method Not Allowed" });
   }
 }
